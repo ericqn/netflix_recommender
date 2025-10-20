@@ -12,12 +12,21 @@ USERNAME = os.getenv('POSTGRES_USER')
 DB_NAME = 'netflix_recommender'
 PORT = 5432
 
-
 engine = create_engine(f'postgresql+psycopg2://{USERNAME}@localhost:{PORT}/{DB_NAME}', echo=True)
 # engine = create_engine(f'sqlite+pysqlite:///:memory:', echo=True)
 Base = declarative_base()
 
 EMBD_DIM = 384
+
+class MovieInfo(Base):
+    __tablename__ = 'movie_info'
+
+    id = Column(Integer, primary_key=True)
+    movie_title = Column(String, unique=True, nullable=False)
+    description = Column(String, nullable=True)
+    director = Column(String, nullable=True)
+    cast = Column(String, nullable=True)
+    genres = Column(String, nullable=True)
 
 class TitleDatabase(Base):
     __tablename__ = 'title_embds'

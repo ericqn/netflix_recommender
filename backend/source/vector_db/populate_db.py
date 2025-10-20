@@ -26,6 +26,13 @@ from embedding_utils import (
     create_sentence_embedding
 )
 
+# TODO:
+def populate_movie_info(preprocessed_df):
+    """
+    Creates table with movie information containing: Title, Description, Director, Cast, Genres
+    """
+    pass
+
 def populate_with_title_embds(
         embeddings: torch.Tensor, 
         idx_to_title:dict, 

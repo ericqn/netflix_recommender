@@ -148,11 +148,15 @@ name = "client"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "requests" },
     { name = "streamlit" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "streamlit", specifier = ">=1.50.0" }]
+requires-dist = [
+    { name = "requests", specifier = ">=2.32.5" },
+    { name = "streamlit", specifier = ">=1.50.0" },
+]
 
 [[package]]
 name = "colorama"
