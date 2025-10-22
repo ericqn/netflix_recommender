@@ -60,6 +60,15 @@ def get_top_k_metadata_embds(
     return top_k_similar
 
 
+def show_info(movie_title: str, db: Session):
+    query = (
+        db.query(models.MovieInfo)
+        .filter(models.MovieInfo.movie_title == movie_title)
+        .one()
+    )
+    return query
+
+
 # testing:
 if __name__ == '__main__':
     embd_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -79,8 +88,12 @@ if __name__ == '__main__':
         print(type(query))
 
         for item, sim_score in query:
-            print(f'MOVIE TITLE = {item.movie_title} | sim_score = {sim_score}')
+            movie_title = item.movie_title
+            print(f'MOVIE TITLE = {movie_title} | sim_score = {sim_score}')
             
+            information = show_info(movie_title, session)
+            print(f'show description: {information.description}')
+            print(f'show rating: {information.rating}')
             # similar_movies = get_top_k_metadata_embds(item.movie_title, 3, session)
             # print(f'\n\nTOP 3 SIMILAR MOVIES TO {item.movie_title}:\n\n')
             # for sim_item, score in similar_movies:

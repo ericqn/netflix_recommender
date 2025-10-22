@@ -1,5 +1,6 @@
 from pathlib import Path
 import pandas as pd
+import numpy as np
 from sentence_transformers import SentenceTransformer
 import torch
 import torch.nn.functional as F
@@ -29,7 +30,7 @@ def preprocess_into_df(csv_file: Path):
     duplicates_2.drop_duplicates(subset='title', inplace=True)
 
     modified_df = pd.concat([raw_df, duplicates, duplicates_2], ignore_index=True)
-
+    modified_df = modified_df.replace({np.nan: None})
     return modified_df
 
 def retrieve_metadata_strs(

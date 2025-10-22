@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 USERNAME = os.getenv('POSTGRES_USER')
-DB_NAME = 'netflix_recommender'
+DB_NAME = os.getenv('DB_NAME')
 PORT = 5432
 
 engine = create_engine(f'postgresql+psycopg2://{USERNAME}@localhost:{PORT}/{DB_NAME}', echo=True)
@@ -26,7 +26,14 @@ class MovieInfo(Base):
     description = Column(String, nullable=True)
     director = Column(String, nullable=True)
     cast = Column(String, nullable=True)
-    genres = Column(String, nullable=True)
+    genres = Column(String, nullable=True) #listed_in
+    country_origin = Column(String, nullable=True)
+    date_added = Column(String, nullable=True)
+    release_year = Column(String, nullable=True)
+    rating = Column(String, nullable=True)
+    duration = Column(String, nullable=True)
+    show_type = Column(String, nullable=True) # classifies as movie or tv show
+
 
 class TitleDatabase(Base):
     __tablename__ = 'title_embds'
@@ -71,30 +78,7 @@ def clear_title_db(db: Session):
         db.rollback()
     return delete_rows, delete_metadata_rows
 
-if __name__ == '__main__':
+if __name__ == 'test':
     with SessionLocal() as db:
         result = clear_title_db(db)
         print(f'\n\n\n\nRESULT = {result}\n\n\n\n')
-
-if __name__ == 'dis da noobie':
-    with SessionLocal() as session:
-        dummy_embd = torch.randn(EMBD_DIM, dtype=torch.float)
-        dummy_title = 'this is the best noobie 1'
-        test_data = TitleDatabase(
-            movie_title = dummy_title,
-            title_embedding = dummy_embd
-        )
-
-        session.add(test_data)
-        session.commit()
-        session.refresh(test_data)
-
-        query = (
-            session.query(TitleDatabase)
-            .filter(TitleDatabase.movie_title == dummy_title)
-            .all()
-        )
-
-        print('Printing query results...\n')
-        for row in query:
-            print(f'title = {row.movie_title} | embedding shape = {row.title_embedding.shape}')

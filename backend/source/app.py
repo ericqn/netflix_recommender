@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
 
 from source.vector_db.embedding_utils import create_sentence_embedding
-from source.vector_db.operations import get_top_k_title_embds, get_top_k_metadata_embds
+from source.vector_db.operations import get_top_k_title_embds, get_top_k_metadata_embds, show_info
 from source.vector_db.models import get_db
 
 app = FastAPI()
@@ -77,6 +77,24 @@ async def get_recommendations(
     return {
         'movie_names': movie_names,
         'sim_scores': sim_scores
+    }
+
+
+@app.get('/get-show-info')
+async def get_show_info(movie_title: str, db: Session = Depends(get_db)):
+    show = show_info(movie_title, db)
+
+    return {
+        'description' : show.description,
+        'director' : show.director,
+        'cast' : show.cast,
+        'genres' : show.genres,
+        'country_origin' : show.country_origin,
+        'date_added' : show.date_added,
+        'release_year' : show.release_year,
+        'rating' : show.rating,
+        'duration' : show.duration,
+        'show_type' : show.show_type
     }
 
 @app.get('/debug-endpoint')
